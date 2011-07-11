@@ -1,0 +1,3 @@
+Repository for utility scripts.
+
+At present the only one is split-at-layers.py, which can be found in the RepRap directory.
