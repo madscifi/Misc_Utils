@@ -345,7 +345,7 @@ sdram_active:
     /* Set row */
     //output_address
     lw      t1, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
-    and     t1, ADDRESS_MASK
+    and     t1, ~ADDRESS_MASK
     or      t1, a0
     sw      t1, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
     
@@ -380,7 +380,7 @@ sdram_write:
     /* Set column */
     //output_column
     lw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
-    and     v0, ADDRESS_MASK
+    and     v0, ~ADDRESS_MASK
     or      v0, a0
     sw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
 
@@ -447,7 +447,7 @@ sdram_read:
     /* Set column */
     //output_column
     lw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
-    and     v0, ADDRESS_MASK
+    and     v0, ~ADDRESS_MASK
     or      v0, a0
     sw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
 
