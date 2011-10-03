@@ -1,0 +1,32 @@
+# this should be added to the hardware\pic32\boards.txt file.
+# it is the configuration to build for the UBW32 board.
+# note that the upload does not work - you have to use the 
+# UBW32 hid uploader to upload the compiled .hex file.
+
+############################################################
+ubw32_mx795a.name=Pic32 UBW32-MX795 ubw32 bootloader
+
+# new items
+ubw32_mx795a.platform=pic32
+ubw32_mx795a.board=_BOARD_UBW32_MX795_
+ubw32_mx795a.compiler.define=-Danything_you_want
+ubw32_mx795a.ccflags=ffff
+ubw32_mx795a.ldscript=chipKIT-MAX32-application-32MX795F512L-ubw32.ld
+# end of new items
+
+ubw32_mx795a.upload.protocol=stk500v2
+ubw32_mx795a.upload.maximum_size=520192
+ubw32_mx795a.upload.speed=115200
+
+ubw32_mx795a.bootloader.low_fuses=0xff
+ubw32_mx795a.bootloader.high_fuses=0xdd
+ubw32_mx795a.bootloader.extended_fuses=0x00
+ubw32_mx795a.bootloader.path=not-supported
+ubw32_mx795a.bootloader.file=not-supported
+ubw32_mx795a.bootloader.unlock_bits=0x3F
+ubw32_mx795a.bootloader.lock_bits=0x0F
+
+ubw32_mx795a.build.mcu=32MX795F512L
+ubw32_mx795a.build.f_cpu=80000000L
+ubw32_mx795a.build.core=pic32
+#ubw32_mx795a.upload.using=
