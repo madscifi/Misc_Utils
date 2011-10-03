@@ -124,17 +124,17 @@
     .globl sdram_sleep
     .globl sdram_wake
     .globl sdram_bank
-	
-	.type sdram_init, @function
-	.type sdram_read, @function
-	.type sdram_write, @function
-	.type sdram_active, @function
-	.type sdram_auto_refresh, @function
-	.type sdram_precharge, @function
-	.type sdram_precharge_all, @function
-	.type sdram_sleep, @function
-	.type sdram_wake, @function
-	.type sdram_bank, @function
+    
+    .type sdram_init, @function
+    .type sdram_read, @function
+    .type sdram_write, @function
+    .type sdram_active, @function
+    .type sdram_auto_refresh, @function
+    .type sdram_precharge, @function
+    .type sdram_precharge_all, @function
+    .type sdram_sleep, @function
+    .type sdram_wake, @function
+    .type sdram_bank, @function
 
     /* All SDRAM access functions must run from the RAM.
      * Flash memory wait states may interfere with the 
@@ -164,18 +164,18 @@
  
 #if 0
 #define sync_clock \
-	la	t8, TMR2; \
-	la  v0, 1f; \
-	lw	v1, (t8); \
-	and V1, 0x3; \
-	sll v1, 2; \
-	sub v0, v1; \
-	jr	v0; \
-	nop; \
-	nop; \
-	nop; \
-	nop; \
-	nop; \
+    la	t8, TMR2; \
+    la  v0, 1f; \
+    lw	v1, (t8); \
+    and V1, 0x3; \
+    sll v1, 2; \
+    sub v0, v1; \
+    jr	v0; \
+    nop; \
+    nop; \
+    nop; \
+    nop; \
+    nop; \
 1:	nop; 
 #endif
 
@@ -193,26 +193,26 @@
 
 
 
-	
-	/*.ent sdram_init*/
+    
+    /*.ent sdram_init*/
 /* Initializes the SDRAM. */
 sdram_init:
 
     /* Initialize address lines */
-	la		t0, TRISA	/* base of io addresses */
-	li		t1, ADDRESS_MASK
-	sw		t1, SDR_ADDRESS_IO + TRIS_OFFSET + CLR_OP_OFFSET(t0)
-	
+    la		t0, TRISA	/* base of io addresses */
+    li		t1, ADDRESS_MASK
+    sw		t1, SDR_ADDRESS_IO + TRIS_OFFSET + CLR_OP_OFFSET(t0)
+    
     li 		t1, 0xFFFF
     sw 		t1, AD1PCFGSET
-	
+    
     li 		t1, BANK_ALL_MASK 
     sw 		t1, SDR_BANK_IO + TRIS_OFFSET + CLR_OP_OFFSET(t0)  
 
     /* All address lines low */
-	li		t1, ADDRESS_MASK
+    li		t1, ADDRESS_MASK
     sw 		t1, SDR_ADDRESS_IO + LAT_OFFSET + CLR_OP_OFFSET(t0)
-	
+    
     li 		t1, BANK_ALL_MASK 
     sw 		t1, SDR_BANK_IO + LAT_OFFSET + CLR_OP_OFFSET(t0)
 
@@ -289,8 +289,8 @@ sdram_init_delay_2:
     sw		a0, SDR_ADDRESS_IO + LAT_OFFSET + SET_OP_OFFSET(t0) /* A10 = 1 for Precharge ALL */
 
     sync_clock
-	
-	.set nomacro
+    
+    .set nomacro
 
     /* Precharge All */
     sw		t7, SDR_CONTROL_IO + LAT_OFFSET + CLR_OP_OFFSET(t0) /* LLLL */
@@ -313,26 +313,26 @@ sdram_init_delay_2:
     /* Auto Refresh 7 */
     clock4
     /* Auto Refresh 8 */
-	li		t4, ADDRESS_MASK
-	sw		t4, SDR_ADDRESS_IO + LAT_OFFSET + CLR_OP_OFFSET(t0)
-	clock2
+    li		t4, ADDRESS_MASK
+    sw		t4, SDR_ADDRESS_IO + LAT_OFFSET + CLR_OP_OFFSET(t0)
+    clock2
     /* Load Mode Register */
-	sw		t6, SDR_ADDRESS_IO + LAT_OFFSET + SET_OP_OFFSET(t0)
-	sw		t7, SDR_CONTROL_IO + LAT_OFFSET + CLR_OP_OFFSET(t0)
+    sw		t6, SDR_ADDRESS_IO + LAT_OFFSET + SET_OP_OFFSET(t0)
+    sw		t7, SDR_CONTROL_IO + LAT_OFFSET + CLR_OP_OFFSET(t0)
     clock2
     /* Command Inhibit */
-	sw		t7, SDR_CONTROL_IO + LAT_OFFSET + SET_OP_OFFSET(t0)
+    sw		t7, SDR_CONTROL_IO + LAT_OFFSET + SET_OP_OFFSET(t0)
     clock3 
     /* Command Inhibit */
     clock4
-	
-	.set macro
-	
+    
+    .set macro
+    
     /* Return */
     jr		ra
     nop
 
-	/*.end sdram_init*/
+    /*.end sdram_init*/
 
 
 /* Sends ACTIVE command */
@@ -343,16 +343,16 @@ sdram_active:
     li 		t7, (1<<CONTROL_CS_BIT)|(1<<CONTROL_RAS_BIT) 
 
     /* Set row */
-	//output_address
-	lw      t1, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
-	and     t1, ADDRESS_MASK
-	or      t1, a0
-	sw      t1, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
-	
+    //output_address
+    lw      t1, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
+    and     t1, ADDRESS_MASK
+    or      t1, a0
+    sw      t1, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
+    
     sync_clock
-	
-	.set nomacro 
-	
+    
+    .set nomacro 
+    
     /* Active */
     sw		t7, SDR_CONTROL_IO + LAT_OFFSET + INV_OP_OFFSET(t0)
     clock3
@@ -362,12 +362,12 @@ sdram_active:
     /* Command Inhibit */
     clock4
 
-	.set macro
-	
+    .set macro
+    
     /* Return */
     jr		ra
     nop
-	
+    
 
 /* Sends WRITE command */
 sdram_write:
@@ -378,25 +378,25 @@ sdram_write:
     li 		t7, (1<<CONTROL_CS_BIT) | (1<<CONTROL_CAS_BIT) | (1<<CONTROL_WE_BIT) 
 
     /* Set column */
-	//output_column
-	lw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
-	and     v0, ADDRESS_MASK
-	or      v0, a0
-	sw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
+    //output_column
+    lw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
+    and     v0, ADDRESS_MASK
+    or      v0, a0
+    sw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
 
     /* Set data lines */
     //srl 	t5, a2, 24
     //sb		t5, SDR_DATA_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
-	
+    
     sync_clock	
-	
-	.set nomacro 
-	
+    
+    .set nomacro 
+    
     /* Write */
     sw		t7, SDR_CONTROL_IO + LAT_OFFSET + INV_OP_OFFSET(t0) /* LHLL */
     //srl 	t5, a2, 16
     //clock2
-	clock3
+    clock3
     /* Command Inhibit */
     sw		t7, SDR_CONTROL_IO + LAT_OFFSET + INV_OP_OFFSET(t0) /* HHHH */
     sh		a2, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)    /* 2 */
@@ -409,8 +409,8 @@ sdram_write:
     sh		a3, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)    /* 4 */
     //srl 	t5, a3, 16
     clock3
-	
-	#if 0
+    
+    #if 0
     /* Command Inhibit */
     sb		t5, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)    /* 5 */
     srl 	t5, a3, 16
@@ -425,12 +425,12 @@ sdram_write:
     /* Command Inhibit */
     sb		a3, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)    /* 8 */
     clock3
-	#endif
-	
-	sw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)	/* restore address lines */
+    #endif
+    
+    sw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)	/* restore address lines */
 
-	.set macro
-	
+    .set macro
+    
     /* Return */
     jr		ra
     nop
@@ -441,31 +441,31 @@ sdram_read:
 
     /* Get ready. */
     la 		t0, TRISA		/* Port Base */
-	li		t1, 0xffff
+    li		t1, 0xffff
     li 		t7, (1<<CONTROL_CS_BIT) | (1<<CONTROL_CAS_BIT) 
 
     /* Set column */
-	//output_column
-	lw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
-	and     v0, ADDRESS_MASK
-	or      v0, a0
-	sw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
+    //output_column
+    lw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
+    and     v0, ADDRESS_MASK
+    or      v0, a0
+    sw      v0, SDR_ADDRESS_IO + LAT_OFFSET + NOP_OP_OFFSET(t0)
 
     sync_clock
 
-	.set nomacro 
-	
+    .set nomacro 
+    
     /* Read */
     sw		t7, SDR_CONTROL_IO + LAT_OFFSET + INV_OP_OFFSET(t0) /* LHLH */
     clock3
     /* Command Inhibit */
-	sw		t1, SDR_ADDRESS_IO + TRIS_OFFSET + INV_OP_OFFSET(t0) /* make all address lines input */
+    sw		t1, SDR_ADDRESS_IO + TRIS_OFFSET + INV_OP_OFFSET(t0) /* make all address lines input */
     sw		t7, SDR_CONTROL_IO + LAT_OFFSET + INV_OP_OFFSET(t0) /* HHHH */
     clock2
     /* Command Inhibit */
     //clock3                                                             /* 1 - ignore as it contains the col address */
     //lbu		v0, SDR_ADDRESS_IO + PORT_OFFSET + NOP_OP_OFFSET(t0)       /* 1 */
-	clock4 /* 1 - ignore as it contains the column address, not any useful data */
+    clock4 /* 1 - ignore as it contains the column address, not any useful data */
     /* Command Inhibit */
     clock3
     lhu		v0, SDR_ADDRESS_IO + PORT_OFFSET + NOP_OP_OFFSET(t0)       /* 2 */
@@ -473,14 +473,14 @@ sdram_read:
     //sll		v0, v0, 8
     //or		v0, v0, t5
     //clock1
-	clock3
+    clock3
     lhu		t5, SDR_ADDRESS_IO + PORT_OFFSET + NOP_OP_OFFSET(t0)       /* 3 */
     /* Command Inhibit */
     sll		t5, t5, 16
     or		v0, v0, t5
     clock1
     lhu		v1, SDR_ADDRESS_IO + PORT_OFFSET + NOP_OP_OFFSET(t0)       /* 4 */
-	#if 0
+    #if 0
     /* Command Inhibit */
     sll		v0, v0, 8
     or		v0, v0, t5
@@ -502,12 +502,12 @@ sdram_read:
     /* Command Inhibit */
     sll		v1, v1, 8
     or		v1, v1, t5
-	#endif
-	nop
-	sw		t1, SDR_ADDRESS_IO + TRIS_OFFSET + INV_OP_OFFSET(t0)    /* make all address lines output again */
+    #endif
+    nop
+    sw		t1, SDR_ADDRESS_IO + TRIS_OFFSET + INV_OP_OFFSET(t0)    /* make all address lines output again */
 
-	.set macro 
-	
+    .set macro 
+    
     /* Return */
     jr		ra
     nop
@@ -524,9 +524,9 @@ sdram_precharge_all:
     sw		t3, SDR_ADDRESS_IO + LAT_OFFSET + SET_OP_OFFSET(t0) /* A10 = 1 for Precharge ALL */
 
     sync_clock
-	
-	.set nomacro
-	
+    
+    .set nomacro
+    
     /* Precharge All */
     sw		t4, SDR_CONTROL_IO + LAT_OFFSET + INV_OP_OFFSET(t0) /* LLHL */
     clock3
@@ -534,8 +534,8 @@ sdram_precharge_all:
     sw		t4, SDR_CONTROL_IO + LAT_OFFSET + INV_OP_OFFSET(t0) /* LLLL */
     clock3
 
-	.set macro 
-	
+    .set macro 
+    
     /* Return */
     jr		ra
     nop
@@ -552,9 +552,9 @@ sdram_precharge:
     sw		t3, SDR_ADDRESS_IO + LAT_OFFSET + CLR_OP_OFFSET(t0) /* A10 = 0 for Precharge */
 
     sync_clock
-	
-	.set nomacro
-	
+    
+    .set nomacro
+    
     /* Precharge All */
     sw		t4, SDR_CONTROL_IO + LAT_OFFSET + INV_OP_OFFSET(t0) /* LLHL */
     clock3
@@ -562,8 +562,8 @@ sdram_precharge:
     sw		t4, SDR_CONTROL_IO + LAT_OFFSET + INV_OP_OFFSET(t0) /* LLLL */
     clock3
 
-	.set macro
-	
+    .set macro
+    
     /* Return */
     jr		ra
     nop
@@ -578,9 +578,9 @@ sdram_auto_refresh:
     li 		t4, (1<<CONTROL_CS_BIT)|(1<<CONTROL_RAS_BIT)|(1<<CONTROL_CAS_BIT) 
 
     sync_clock
-	
-	.set nomacro 
-	
+    
+    .set nomacro 
+    
     /* Auto Refresh */
     sw		t4, SDR_CONTROL_IO + LAT_OFFSET + INV_OP_OFFSET(t0) /* LLLH */
     clock3
@@ -588,8 +588,8 @@ sdram_auto_refresh:
     sw		t4, SDR_CONTROL_IO + LAT_OFFSET + INV_OP_OFFSET(t0) /* LLLL */
     clock3
 
-	.set macro
-	
+    .set macro
+    
     /* Return */
     jr		ra
     nop
@@ -604,9 +604,9 @@ sdram_sleep:
     li 		t4, (1<<CONTROL_CS_BIT)|(1<<CONTROL_RAS_BIT)|(1<<CONTROL_CAS_BIT) 
 
     sync_clock
-	
-	.set nomacro
-	
+    
+    .set nomacro
+    
     /* Auto Refresh */
     sw		t4, SDR_CONTROL_IO + LAT_OFFSET + INV_OP_OFFSET(t0) /* LLLH */
     sw 		t1, SDR_CKE_IO + LAT_OFFSET + CLR_OP_OFFSET(t0)     /* CKE low */
@@ -615,8 +615,8 @@ sdram_sleep:
     sw		t4, SDR_CONTROL_IO + LAT_OFFSET + INV_OP_OFFSET(t0) /* LLLL */
     clock3
 
-	.set macro
-	
+    .set macro
+    
     /* Return */
     jr		ra
     nop
@@ -629,9 +629,9 @@ sdram_wake:
     li 		t1, (1<<CKE_BIT) 
 
     sync_clock
-	
-	.set nomacro
-	
+    
+    .set nomacro
+    
     /* Command Inhibit */
     sw 		t1, SDR_CKE_IO + LAT_OFFSET + SET_OP_OFFSET(t0) /* CKE low */
     clock3
@@ -640,8 +640,8 @@ sdram_wake:
     /* Command Inhibit */
     clock4
 
-	.set macro
-	
+    .set macro
+    
     /* Return */
     jr		ra
     nop
@@ -651,12 +651,12 @@ sdram_wake:
 sdram_bank:
     
     la 		t0, TRISA			/* Port Base */
-	lw		t1, SDR_BANK_IO + LAT_OFFSET + NOP_OP_OFFSET(t0);
-	and		t1, ~BANK_ALL_MASK
-	sll     t2, a0, BANK_0_BIT
-	or      t1, t2
-	sw      t1, SDR_BANK_IO + LAT_OFFSET + NOP_OP_OFFSET(t0);
-	
+    lw		t1, SDR_BANK_IO + LAT_OFFSET + NOP_OP_OFFSET(t0);
+    and		t1, ~BANK_ALL_MASK
+    sll     t2, a0, BANK_0_BIT
+    or      t1, t2
+    sw      t1, SDR_BANK_IO + LAT_OFFSET + NOP_OP_OFFSET(t0);
+    
     /* Return */
     jr		ra
     nop
