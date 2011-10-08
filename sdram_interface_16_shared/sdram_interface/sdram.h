@@ -16,8 +16,8 @@
 extern "C" {
 extern __longramfunc__ void sdram_init();
 extern __longramfunc__ void sdram_active(uint16_t addr);
-extern __longramfunc__ void sdram_write(uint16_t addr, uint64_t val);
-extern __longramfunc__ uint64_t sdram_read(uint16_t addr);
+extern __longramfunc__ void sdram_write(uint16_t addr, const void *p);
+extern __longramfunc__ void sdram_read(uint16_t addr, void *p);
 extern __longramfunc__ void sdram_auto_refresh(void);
 extern __longramfunc__ void sdram_precharge(void);
 extern __longramfunc__ void sdram_precharge_all(void);
